@@ -1,6 +1,13 @@
 from multipledispatch import dispatch
 from cell import Cell
-from collections import namedtuple
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.patches import Polygon
+from matplotlib.lines import Line2D
+from matplotlib.artist import Artist
+
+def close_event():
+    plt.close() #timer calls this function after 3 seconds and closes the window 
 
 class Board:
     cells = set()
@@ -50,6 +57,29 @@ class Board:
                     print("_", end="")
             print()
         print()
+
+    def display(self):
+        timer =  plt.figure().canvas.new_timer(interval = 3000)
+        timer.add_callback(close_event)
+        timer.start()
+        ax = plt.subplot()
+        polys = []
+        for i in range(10):
+            for j in range(10):
+                xs = [i, i + 1, i + 1, i, i]
+                ys = [j, j, j + 1, j + 1, j]
+                color = 'b'
+                for p in self.cells:
+                    if p.equiv(i, j):
+                        color = 'r'
+                poly = Polygon(np.column_stack([xs, ys]), color=color)
+                ax.add_patch(poly)
+        ax.set_xlim((0, 10))
+        ax.set_ylim((0, 10))
+        for i in range(10):
+            plt.plot([0, 10], [i, i], marker='o', color='y')
+            plt.plot([i, i], [0, 10], marker='o', color='y')
+        plt.show()
 
     def check(self, cell):
         coun = 0

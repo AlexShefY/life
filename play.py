@@ -16,3 +16,6 @@ class Play:
     
     def out(self):
         self.board.out()
+
+    def display(self):
+        self.board.display()
