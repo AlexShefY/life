@@ -26,7 +26,7 @@ class Board:
     def cells_to_delete(self):
         cells_to_delete = set()
         for cell in self.cells:
-            if cell.check(self):
+            if self.check(cell):
                 cells_to_delete.add(cell)
         return cells_to_delete
 
@@ -50,3 +50,10 @@ class Board:
                     print("_", end="")
             print()
         print()
+
+    def check(self, cell):
+        coun = 0
+        for cell_ in cell.neighbours():
+            if self.is_taken(cell_.x, cell_.y):
+                coun += 1
+        return coun < 2 or coun > 3
