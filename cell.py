@@ -6,13 +6,6 @@ class Cell:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-    
-    def check(self, board):
-        coun = 0
-        for cell in self.neighbours():
-            if board.is_taken(cell.x, cell.y):
-                coun += 1
-        return coun < 2 or coun > 3
 
     def equiv(self, i, j):
         return self.x == i and self.y == j

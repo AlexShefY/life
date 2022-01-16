@@ -14,8 +14,8 @@ class Play:
     def add_cell(self, i, j):
         self.board.add_cell(i, j)
     
-    def out(self):
-        self.board.out()
+    def out_consol(self):
+        self.board.out_consol()
 
-    def display(self):
-        self.board.display()
+    def plot(self):
+        self.board.plot()

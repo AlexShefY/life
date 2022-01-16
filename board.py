@@ -48,7 +48,7 @@ class Board:
     def remove_cell(self, cell):
         self.cells.remove(cell)
     
-    def out(self):
+    def out_consol(self):
         for x in range(10):
             for y in range(10):
                 if self.is_taken(x, y):
@@ -58,27 +58,44 @@ class Board:
             print()
         print()
 
-    def display(self):
+    def plot(self):
         timer =  plt.figure().canvas.new_timer(interval = 3000)
         timer.add_callback(close_event)
         timer.start()
         ax = plt.subplot()
         polys = []
-        for i in range(10):
-            for j in range(10):
+        minx = 1e9
+        maxx = -1e9
+        miny = 1e9
+        maxy = -1e9
+        
+        for cell in self.cells:
+            minx = min(minx, cell.x)
+            miny = min(miny, cell.y)
+            maxx = max(maxx, cell.x)
+            maxy = max(maxy, cell.y)
+
+        len_sq = max(maxy - miny, maxx - minx)
+        maxx = minx + len_sq
+        maxy = miny + len_sq
+
+        for i in range(minx, maxx + 1):
+            for j in range(miny, maxy + 1):
                 xs = [i, i + 1, i + 1, i, i]
                 ys = [j, j, j + 1, j + 1, j]
                 color = 'b'
-                for p in self.cells:
-                    if p.equiv(i, j):
-                        color = 'r'
+                if self.is_taken(i, j):
+                    color = 'r'
                 poly = Polygon(np.column_stack([xs, ys]), color=color)
                 ax.add_patch(poly)
-        ax.set_xlim((0, 10))
-        ax.set_ylim((0, 10))
-        for i in range(10):
-            plt.plot([0, 10], [i, i], marker='o', color='y')
-            plt.plot([i, i], [0, 10], marker='o', color='y')
+
+        ax.set_xlim((minx, maxx + 1))
+        ax.set_ylim((miny, maxy + 1))
+
+        for i in range(len_sq + 1):
+            plt.plot([minx, maxx + 1], [miny + i, miny + i], marker='o', color='y')
+            plt.plot([minx + i, minx + i], [miny, maxy + 1], marker='o', color='y')
+        
         plt.show()
 
     def check(self, cell):
